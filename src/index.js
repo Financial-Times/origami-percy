@@ -71,7 +71,7 @@ async function generateDemosFor(brand, demosConfig) {
   );
   const demoNames = brandSupportedDemos.map(d => d.name).join(',');
   await exec.exec(
-    `"${npxPath}" origami-build-tools demo --brand=${brand} --demo--filter="${demoNames}"`,
+    `"${npxPath}" origami-build-tools demo --brand=${brand} --demo-filter="${demoNames}"`,
     [],
     { cwd: "./" }
   );
