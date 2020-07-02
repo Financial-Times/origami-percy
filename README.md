@@ -19,16 +19,32 @@ on:
       - opened
       - reopened
       - synchronize
+    paths: 
+     - "bower.json"
+     - "origami.json"
+     - "main.js"
+     - "main.scss"
+     - "demos/**"
+     - "src/**"
   push:
     branches: master
+    paths: 
+     - "bower.json"
+     - "origami.json"
+     - "main.js"
+     - "main.scss"
+     - "demos/**"
+     - "src/**"
+
 jobs:
-  build:
+  percy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
-      - name: Percy Test
-        uses: Financial-Times/origami-percy
-        env:
-          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+    - uses: actions/checkout@v2
+    - uses: Financial-Times/origami-percy@v1
+      with:
+        github-token: ${{secrets.ORIGAMI_FOX_ACCESS_TOKEN}} # To comment as the Origami Fox mascot GitHub user
+      env:
+        PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+
 ```
