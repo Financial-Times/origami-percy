@@ -38,10 +38,10 @@ const { context, GitHub } = require("@actions/github");
       } else {
         await generateDemosFor("master", demosConfig);
       }
-      await generatePercySnapshots();
 
       if (isPullRequestLabelledWithPercy) {
         const token = core.getInput("github-token", { required: true });
+        await generatePercySnapshots();
         const github = new GitHub(token);
         await github.issues.createComment({
           issue_number: context.issue.number,
