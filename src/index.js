@@ -5,13 +5,12 @@ const fs = require("fs");
 const { context, GitHub } = require("@actions/github");
 
 (async () => {
-  try {
-    const isPullRequestLabelledWithPercy =
+  const isPullRequestLabelledWithPercy =
       context.payload.pull_request &&
       context.payload.pull_request.labels
         .map((label) => label.name)
         .includes("percy");
-
+  try {
     const isMasterBranch = context.ref.endsWith("/master");
     if (isMasterBranch || isPullRequestLabelledWithPercy) {
       if (isPullRequestLabelledWithPercy) {
@@ -60,6 +59,16 @@ const { context, GitHub } = require("@actions/github");
       }
     }
   } catch (error) {
+    if (isPullRequestLabelledWithPercy) {
+      const token = core.getInput("github-token", { required: true });
+      const github = new GitHub(token);
+      await github.issues.createComment({
+        issue_number: context.issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        body: "👋 Percy failed to run!\n\n Here is the error message:\n\n>"+error.message,
+      });
+    }
     core.setFailed(error.message);
   }
 })();
