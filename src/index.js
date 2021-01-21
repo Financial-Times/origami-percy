@@ -27,7 +27,7 @@ const { context, GitHub } = require("@actions/github");
       const demosConfig = componentConfig.demos || [];
 
       let npxPath = await io.which("npx", true);
-      await exec.exec(`"${npxPath}" origami-build-tools install`, [], {
+      await exec.exec(`"${npxPath}" origami-build-tools@^10 install`, [], {
         cwd: "./",
       });
       if (componentConfig.brands) {
@@ -37,7 +37,7 @@ const { context, GitHub } = require("@actions/github");
       } else {
         await generateDemosFor("master", demosConfig);
       }
-      
+
       await generatePercySnapshots();
 
       if (isPullRequestLabelledWithPercy) {
@@ -81,7 +81,7 @@ async function generateDemosFor(brand, demosConfig) {
   );
   const demoNames = brandSupportedDemos.map(d => d.name).join(',');
   await exec.exec(
-    `"${npxPath}" origami-build-tools demo --brand=${brand} --demo-filter="${demoNames}"`,
+    `"${npxPath}" origami-build-tools@^10 demo --brand=${brand} --demo-filter="${demoNames}"`,
     [],
     { cwd: "./" }
   );
