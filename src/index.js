@@ -11,8 +11,9 @@ const { context, GitHub } = require("@actions/github");
         .map((label) => label.name)
         .includes("percy");
   try {
-    const isMasterBranch = context.ref.endsWith("/master");
-    if (isMasterBranch || isPullRequestLabelledWithPercy) {
+    const isDefaultBranch = context.ref.endsWith("/master") ||
+      context.ref.endsWith("/main");
+    if (isDefaultBranch || isPullRequestLabelledWithPercy) {
       if (isPullRequestLabelledWithPercy) {
         core.exportVariable(
           "PERCY_PULL_REQUEST",
