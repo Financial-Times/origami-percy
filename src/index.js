@@ -5,17 +5,14 @@ const fs = require("fs");
 const { context, GitHub } = require("@actions/github");
 
 (async () => {
+
   const buildToolsVersion = `origami-build-tools@^11.0.0-beta.14`;
-  const isPullRequestLabelledWithPercy =
-      context.payload.pull_request &&
-      context.payload.pull_request.labels
-        .map((label) => label.name)
-        .includes("percy");
+  const isPullRequest = context.payload.pull_request;
   try {
-    const isDefaultBranch = context.ref.endsWith("/master") ||
+    const isDefaultBranch = context.ref.endsWith("/master")
       context.ref.endsWith("/main");
-    if (isDefaultBranch || isPullRequestLabelledWithPercy) {
-      if (isPullRequestLabelledWithPercy) {
+    if (isDefaultBranch || isPullRequest) {
+      if (isPullRequest) {
         core.exportVariable(
           "PERCY_PULL_REQUEST",
           String(context.payload.pull_request.number)
@@ -42,7 +39,7 @@ const { context, GitHub } = require("@actions/github");
 
       await generatePercySnapshots();
 
-      if (isPullRequestLabelledWithPercy) {
+      if (isPullRequest) {
         const token = core.getInput("github-token", { required: true });
         const github = new GitHub(token);
         await github.issues.createComment({
@@ -61,7 +58,7 @@ const { context, GitHub } = require("@actions/github");
       }
     }
   } catch (error) {
-    if (isPullRequestLabelledWithPercy) {
+    if (isPullRequest) {
       const token = core.getInput("github-token", { required: true });
       const github = new GitHub(token);
       await github.issues.createComment({
