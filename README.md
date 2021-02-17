@@ -1,6 +1,6 @@
 # Percy for Origami Components
 
-A GitHub action to visually test Origami Components with Percy. 
+A GitHub action to visually test Origami Components with Percy.
 
 ## Quick start
 
@@ -12,15 +12,16 @@ Below is a sample config:
 
 ``` yaml
 name: Percy
-on: 
+on:
   pull_request:
     types:
       - labeled
       - opened
       - reopened
       - synchronize
-    paths: 
-     - "bower.json"
+    paths:
+     - "package.json"
+     - "package-lock.json"
      - "origami.json"
      - "main.js"
      - "main.scss"
@@ -28,8 +29,9 @@ on:
      - "src/**"
   push:
     branches: master
-    paths: 
-     - "bower.json"
+    paths:
+     - "package.json"
+     - "package-lock.json"
      - "origami.json"
      - "main.js"
      - "main.scss"

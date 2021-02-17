@@ -5,10 +5,12 @@ const fs = require("fs");
 const { context, GitHub } = require("@actions/github");
 
 (async () => {
+  const buildToolsVersion = `origami-build-tools@^11.0.0-beta.14`;
   const isPullRequest = context.payload.pull_request;
   try {
-    const isMasterBranch = context.ref.endsWith("/master");
-    if (isMasterBranch || isPullRequest) {
+    const isDefaultBranch = context.ref.endsWith("/master")
+      context.ref.endsWith("/main");
+    if (isDefaultBranch || isPullRequest) {
       if (isPullRequest) {
         core.exportVariable(
           "PERCY_PULL_REQUEST",
@@ -23,7 +25,7 @@ const { context, GitHub } = require("@actions/github");
       const demosConfig = componentConfig.demos || [];
 
       let npxPath = await io.which("npx", true);
-      await exec.exec(`"${npxPath}" origami-build-tools@^10 install`, [], {
+      await exec.exec(`"${npxPath}" ${buildToolsVersion} install`, [], {
         cwd: "./",
       });
       if (componentConfig.brands) {
@@ -77,7 +79,7 @@ async function generateDemosFor(brand, demosConfig) {
   );
   const demoNames = brandSupportedDemos.map(d => d.name).join(',');
   await exec.exec(
-    `"${npxPath}" origami-build-tools@^10 demo --brand=${brand} --demo-filter="${demoNames}"`,
+    `"${npxPath}" ${buildToolsVersion} demo --brand=${brand} --demo-filter="${demoNames}"`,
     [],
     { cwd: "./" }
   );
