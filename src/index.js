@@ -5,7 +5,6 @@ const fs = require("fs");
 const { context, GitHub } = require("@actions/github");
 
 (async () => {
-
   const buildToolsVersion = `origami-build-tools@^11.0.0-beta.14`;
   const isPullRequest = context.payload.pull_request;
   try {
