@@ -2,10 +2,10 @@ const core = require("@actions/core");
 const exec = require("@actions/exec");
 const io = require("@actions/io");
 const fs = require("fs");
-const { context, GitHub } = require("@actions/github");
+const { context } = require("@actions/github");
 
+const buildToolsVersion = `origami-build-tools@^11.0.0-beta.14`;
 (async () => {
-  const buildToolsVersion = `origami-build-tools@^11.0.0-beta.14`;
   const isPullRequest = context.payload.pull_request;
   try {
     const isDefaultBranch = context.ref.endsWith("/master")
@@ -37,36 +37,8 @@ const { context, GitHub } = require("@actions/github");
       }
 
       await generatePercySnapshots();
-
-      if (isPullRequest) {
-        const token = core.getInput("github-token", { required: true });
-        const github = new GitHub(token);
-        await github.issues.createComment({
-          issue_number: context.issue.number,
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          body: "👋 Percy has finished running the visual regression testing!",
-        });
-
-        await github.issues.removeLabels({
-          issue_number: context.issue.number,
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          labels: ["percy"],
-        });
-      }
     }
   } catch (error) {
-    if (isPullRequest) {
-      const token = core.getInput("github-token", { required: true });
-      const github = new GitHub(token);
-      await github.issues.createComment({
-        issue_number: context.issue.number,
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        body: "👋 Percy failed to run!\n\n Here is the error message:\n\n>"+error.message,
-      });
-    }
     core.setFailed(error.message);
   }
 })();
