@@ -55,8 +55,10 @@ async function generateDemosFor(brand, demosConfig) {
     [],
     { cwd: "./" }
   );
-  await io.mkdirP(outputDir);
-  await io.mv("demos/local", outputDir);
+  if (fs.existsSync("demos/local")) {
+    await io.mkdirP(outputDir);
+    await io.mv("demos/local", outputDir);
+  }
 }
 
 async function generatePercySnapshots() {
