@@ -4,7 +4,7 @@ const io = require("@actions/io");
 const fs = require("fs");
 const { context } = require("@actions/github");
 
-const buildToolsVersion = `origami-build-tools@prerelease`;
+const buildToolsVersion = `origami-build-tools@11`;
 (async () => {
   const isPullRequest = context.payload.pull_request;
   try {
