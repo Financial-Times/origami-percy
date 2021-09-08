@@ -8,8 +8,7 @@ const buildToolsVersion = `origami-build-tools@11`;
 (async () => {
   const isPullRequest = context.payload.pull_request;
   try {
-    const isDefaultBranch = context.ref.endsWith("/master")
-      context.ref.endsWith("/main");
+    const isDefaultBranch = context.ref.endsWith("/master") || context.ref.endsWith("/main");
     if (isDefaultBranch || isPullRequest) {
       if (isPullRequest) {
         core.exportVariable(
